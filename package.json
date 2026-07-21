@@ -1,0 +1,21 @@
+{
+  "name": "hermes-excel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Excel <-> Hermes agent bridge: in-cell =HERMES.* functions + chat pane + agent-driven workbook control.",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node bridge/server.mjs",
+    "dev": "node bridge/server.mjs",
+    "check": "node --check bridge/server.mjs && node --check bridge/hermes-client.mjs && node --check bridge/actions.mjs && node --check bridge/config.mjs && node --check bridge/command-bus.mjs && node --check addin/functions.js && node --check addin/taskpane.js",
+    "test": "node --test bridge/actions.test.mjs",
+    "cert": "npx --yes office-addin-dev-certs install",
+    "sideload": "powershell -NoProfile -ExecutionPolicy Bypass -File install/sideload.ps1",
+    "unsideload": "powershell -NoProfile -ExecutionPolicy Bypass -File install/uninstall.ps1"
+  },
+  "devDependencies": {
+    "office-addin-dev-certs": "^1.13.0"
+  }
+}
