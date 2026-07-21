@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/office-js/custom-functions.schema.json",
+  "functions": [
+    {
+      "id": "SOR",
+      "name": "SOR",
+      "description": "Hermes ajanına serbest soru sorar; ajan uygun MCP'leri kullanıp cevabı hücreye yazar.",
+      "parameters": [
+        { "name": "soru", "description": "Hermes'e sorulacak soru", "type": "string" },
+        { "name": "baglam", "description": "İsteğe bağlı ek bağlam", "type": "string", "optional": true }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "EMSAL",
+      "name": "EMSAL",
+      "description": "Verilen konuda en ilgili emsal kararı getirir (emsal_mcp).",
+      "parameters": [ { "name": "konu", "description": "Emsal aranacak konu", "type": "string" } ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "TAPU",
+      "name": "TAPU",
+      "description": "Tapu/parsel bilgisini getirir (parsel-konum).",
+      "parameters": [ { "name": "sorgu", "description": "Tapu sorgusu (ör. 'İstanbul Kadıköy ada 123 parsel 4')", "type": "string" } ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "PARSEL",
+      "name": "PARSEL",
+      "description": "İl/ilçe/ada/parsel'e göre konum, yüzölçüm ve nitelik getirir.",
+      "parameters": [
+        { "name": "il", "type": "string" },
+        { "name": "ilce", "type": "string" },
+        { "name": "ada", "type": "string" },
+        { "name": "parsel", "type": "string" }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "HESAP",
+      "name": "HESAP",
+      "description": "Hesap motoruna bir hesap yaptırır (değer, faiz, kamulaştırma bedeli vb.).",
+      "parameters": [ { "name": "ifade", "description": "Hesaplanacak ifade/istek", "type": "string" } ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "RAPOR",
+      "name": "RAPOR",
+      "description": "Rapor pipeline'ından kısa bir rapor bölümü üretir.",
+      "parameters": [ { "name": "bolum", "description": "İstenen rapor bölümü", "type": "string" } ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "HAFIZA",
+      "name": "HAFIZA",
+      "description": "Genel hafızadan bir bilgiyi hatırlar.",
+      "parameters": [ { "name": "anahtar", "description": "Anahtar/konu", "type": "string" } ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "MCP",
+      "name": "MCP",
+      "description": "Genel MCP geçişi: belirtilen sunucudaki aracı çağırır.",
+      "parameters": [
+        { "name": "sunucu", "description": "MCP sunucu adı (ör. parsel-konum)", "type": "string" },
+        { "name": "arac", "description": "Araç adı", "type": "string" },
+        { "name": "argumanlarJSON", "description": "Argümanlar (JSON metni)", "type": "string", "optional": true }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "SINIFLA",
+      "name": "SINIFLA",
+      "description": "Bir metni verilen ölçüte göre sınıflandırır; yalnız etiketi döndürür.",
+      "parameters": [
+        { "name": "deger", "description": "Sınıflandırılacak metin (hücre olabilir)", "type": "string" },
+        { "name": "olcut", "description": "Ölçüt, ör. 'kalite: yüksek/orta/düşük'", "type": "string" }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "CIKAR",
+      "name": "CIKAR",
+      "description": "Metinden istenen alanı çıkarır (ör. firma adı, tarih).",
+      "parameters": [
+        { "name": "deger", "description": "Kaynak metin (hücre olabilir)", "type": "string" },
+        { "name": "ne", "description": "Çıkarılacak alan, ör. 'firma adı'", "type": "string" }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "OZETLE",
+      "name": "OZETLE",
+      "description": "Bir aralığı tek cümlede özetler.",
+      "parameters": [
+        { "name": "aralik", "description": "Özetlenecek hücre aralığı", "type": "any", "dimensionality": "matrix" }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "FORMUL",
+      "name": "FORMUL",
+      "description": "Açıklamadan tek bir Excel formülü üretir.",
+      "parameters": [
+        { "name": "amac", "description": "Formülün yapması gereken iş", "type": "string" }
+      ],
+      "result": { "type": "string" },
+      "options": { "stream": true }
+    }
+  ]
+}

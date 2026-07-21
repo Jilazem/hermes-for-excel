@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hermes</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="taskpane.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="logo">H</span>
+        <span>Hermes for Excel</span>
+      </div>
+      <div class="hdr-right">
+        <span id="status" class="status status--off"></span>
+        <button id="recBtn" class="icon-btn"></button>
+        <button id="settingsBtn" class="icon-btn" title="Ayarlar / Settings">⚙</button>
+      </div>
+    </header>
+
+    <section id="settings" class="settings hidden">
+      <div class="settings-title" data-i18n="settings_title"></div>
+      <label data-i18n="lang_label">Dil / Language
+        <select id="setLang"></select>
+      </label>
+      <label data-i18n="provider">Sağlayıcı
+        <select id="setProvider">
+          <option value="gateway">OpenAI-compatible (Hermes gateway / OpenAI / Ollama / LM Studio)</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="mock">Mock (offline)</option>
+        </select>
+      </label>
+      <div id="gatewayFields">
+        <label data-i18n="gateway_url">Gateway / API URL
+          <input id="setGatewayUrl" type="text" placeholder="http://127.0.0.1:8646/v1/chat/completions" />
+        </label>
+        <div class="hint">OpenAI: https://api.openai.com/v1/chat/completions · Ollama: http://localhost:11434/v1/chat/completions</div>
+        <label data-i18n="api_key">API Anahtarı
+          <input id="setApiKey" type="password" placeholder="sk-…" autocomplete="off" />
+        </label>
+        <label data-i18n="model">Model
+          <input id="setModel" type="text" placeholder="hermes-agent / gpt-4o / llama3" />
+        </label>
+      </div>
+      <div id="anthropicFields" class="hidden">
+        <label data-i18n="anth_token">Anthropic Token
+          <input id="setAnthToken" type="password" placeholder="sk-ant-…" autocomplete="off" />
+        </label>
+        <label data-i18n="model">Model
+          <input id="setAnthModel" type="text" placeholder="claude-opus-4-8" />
+        </label>
+      </div>
+      <div class="row">
+        <button id="settingsCancel" class="ghost" data-i18n="close"></button>
+        <button id="settingsSave" data-i18n="save"></button>
+      </div>
+      <div id="settingsMsg" class="hint"></div>
+    </section>
+
+    <main id="log" class="log">
+      <div class="msg msg--sys">
+        <b data-i18n="ready_title"></b> <span data-i18n="ready_body"></span>
+        <div class="hint" data-i18n="ready_hint"></div>
+      </div>
+    </main>
+
+    <div id="pending" class="pending hidden"><span class="dot"></span> <span data-i18n="pending"></span></div>
+
+    <footer>
+      <div id="recLog" class="rec-log hidden">
+        <div class="rec-head"><span class="rec-dot"></span> <span data-i18n="rec_head"></span> <span id="recCount">0</span> <span data-i18n="rec_ops"></span></div>
+        <div id="recLines" class="rec-lines"></div>
+      </div>
+      <div id="selbar" class="selbar" title="Seçili aralık / Selection">
+        <span class="sel-ico">▦</span>
+        <span id="selText"></span>
+        <button id="selUse" class="sel-use hidden" data-i18n="sel_use"></button>
+      </div>
+      <textarea id="input" rows="2" data-i18n-ph="input_ph"></textarea>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="ctxChk" checked /> <span data-i18n="ctx_send"></span></label>
+        <button id="send" data-i18n="send"></button>
+      </div>
+    </footer>
+    <script src="i18n.js"></script>
+    <script src="taskpane.js"></script>
+  </body>
+</html>
