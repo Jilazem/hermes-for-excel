@@ -23,10 +23,10 @@
 
     <section id="settings" class="settings hidden">
       <div class="settings-title" data-i18n="settings_title"></div>
-      <label data-i18n="lang_label">Dil / Language
+      <label><span data-i18n="lang_label"></span>
         <select id="setLang"></select>
       </label>
-      <label data-i18n="provider">Sağlayıcı
+      <label><span data-i18n="provider"></span>
         <select id="setProvider">
           <option value="gateway">OpenAI-compatible (Hermes gateway / OpenAI / Ollama / LM Studio)</option>
           <option value="anthropic">Anthropic (Claude)</option>
@@ -34,22 +34,22 @@
         </select>
       </label>
       <div id="gatewayFields">
-        <label data-i18n="gateway_url">Gateway / API URL
+        <label><span data-i18n="gateway_url"></span>
           <input id="setGatewayUrl" type="text" placeholder="http://127.0.0.1:8646/v1/chat/completions" />
         </label>
         <div class="hint">OpenAI: https://api.openai.com/v1/chat/completions · Ollama: http://localhost:11434/v1/chat/completions</div>
-        <label data-i18n="api_key">API Anahtarı
+        <label><span data-i18n="api_key"></span>
           <input id="setApiKey" type="password" placeholder="sk-…" autocomplete="off" />
         </label>
-        <label data-i18n="model">Model
+        <label><span data-i18n="model"></span>
           <input id="setModel" type="text" placeholder="hermes-agent / gpt-4o / llama3" />
         </label>
       </div>
       <div id="anthropicFields" class="hidden">
-        <label data-i18n="anth_token">Anthropic Token
+        <label><span data-i18n="anth_token"></span>
           <input id="setAnthToken" type="password" placeholder="sk-ant-…" autocomplete="off" />
         </label>
-        <label data-i18n="model">Model
+        <label><span data-i18n="model"></span>
           <input id="setAnthModel" type="text" placeholder="claude-opus-4-8" />
         </label>
       </div>
