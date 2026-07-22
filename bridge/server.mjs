@@ -10,7 +10,7 @@ import { homedir } from "node:os";
 import { config, mcpMap } from "./config.mjs";
 import { askHermes, healthProbe } from "./hermes-client.mjs";
 import { getSettingsMasked, setSettings } from "./settings.mjs";
-import { normalizeActions, extractJson } from "./actions.mjs";
+import { normalizeActions, extractJson, extractJsonArray } from "./actions.mjs";
 import { addClient, pushCommands, clientCount } from "./command-bus.mjs";
 
 const ADDIN_DIR = join(config.root, "addin");
@@ -126,6 +126,58 @@ async function handleFn(req, res) {
   }
 
   const spec = MAP.functions?.[fn];
+
+  // ── DOSYA(etiketler, klasör) → etiket sırasına göre değer KOLONU (taşma matrisi)
+  if (fn === "DOSYA") {
+    const labels = (Array.isArray(args[0]) ? args[0].flat() : [args[0]])
+      .map((x) => String(x == null ? "" : x).trim())
+      .filter(Boolean);
+    const folder = translatePath(args[1]);
+    if (!labels.length) return json(res, 200, { value: [["#HERMES! etiket aralığı boş"]] });
+    const user =
+      `Klasör: ${folder}\nÇıkarılacak alanlar (bu sırayla, ${labels.length} adet):\n` +
+      labels.map((l, i) => `${i + 1}. ${l}`).join("\n") +
+      `\n\nHer alan için değeri döndür.`;
+    try {
+      const raw = await askHermes(
+        [{ role: "system", content: spec.system }, { role: "user", content: user }],
+        { timeoutMs: config.fnTimeoutMs, maxTokens: 4096, idempotencyKey: key }
+      );
+      let arr = extractJsonArray(raw) || [];
+      while (arr.length < labels.length) arr.push("Belirtilmemiş");
+      arr = arr.slice(0, labels.length);
+      const value = arr.map((v) => [v == null ? "" : String(v)]); // kolon matris
+      fnCache.set(key, { value, at: Date.now() });
+      return json(res, 200, { value });
+    } catch (e) {
+      return json(res, 200, { value: labels.map(() => [`#HERMES! ${errShort(e)}`]) });
+    }
+  }
+
+  // ── HISSEDAR(klasör) → 5 sütunlu hissedar tablosu (taşma matrisi)
+  if (fn === "HISSEDAR") {
+    const folder = translatePath(args[0]);
+    try {
+      const raw = await askHermes(
+        [{ role: "system", content: spec.system }, { role: "user", content: `Klasör: ${folder}` }],
+        { timeoutMs: config.fnTimeoutMs, maxTokens: 4096, idempotencyKey: key }
+      );
+      const arr = extractJsonArray(raw) || [];
+      const matrix = arr
+        .filter(Array.isArray)
+        .map((row) => {
+          const r = row.slice(0, 5).map((v) => (v == null ? "" : String(v)));
+          while (r.length < 5) r.push("");
+          return r;
+        });
+      const value = matrix.length ? matrix : [["Belirtilmemiş", "", "", "", ""]];
+      fnCache.set(key, { value, at: Date.now() });
+      return json(res, 200, { value });
+    } catch (e) {
+      return json(res, 200, { value: [[`#HERMES! ${errShort(e)}`, "", "", "", ""]] });
+    }
+  }
+
   if (fn === "MCP") {
     // HERMES.MCP(server, tool, argsJson) — ajana doğrudan MCP çağrısı yaptır
     const [server, tool, argJson] = args;
@@ -169,6 +221,14 @@ async function handleFn(req, res) {
 
 function oneLine(s) {
   return String(s || "").replace(/\s*\n+\s*/g, " ").replace(/^["'\s]+|["'\s]+$/g, "").trim().slice(0, 2000);
+}
+// Excel yolunu ajanın gördüğü mount yoluna çevir (DOSYA/HISSEDAR).
+function translatePath(p) {
+  let s = String(p == null ? "" : p).trim();
+  if (config.pathFrom && s.toLowerCase().startsWith(config.pathFrom.toLowerCase())) {
+    s = config.pathTo + s.slice(config.pathFrom.length);
+  }
+  return s.replace(/\\/g, "/");
 }
 function errShort(e) {
   return String(e?.message || e).replace(/\s+/g, " ").slice(0, 120);

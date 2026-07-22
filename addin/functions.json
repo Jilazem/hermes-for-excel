@@ -118,6 +118,27 @@
       ],
       "result": { "type": "string" },
       "options": { "stream": true }
+    },
+    {
+      "id": "DOSYA",
+      "name": "DOSYA",
+      "description": "Bir dava klasöründeki dosyaları Hermes ile inceler; A sütunundaki etiketlere göre değerleri B sütununa taşırır. Ör: =HERMES.DOSYA(A1:A25;\"G:\\...\\klasor\")",
+      "parameters": [
+        { "name": "etiketler", "description": "Alan etiketleri aralığı (ör. A1:A25)", "type": "any", "dimensionality": "matrix" },
+        { "name": "klasor", "description": "Dava klasörünün tam yolu", "type": "string" }
+      ],
+      "result": { "type": "any", "dimensionality": "matrix" },
+      "options": { "stream": true }
+    },
+    {
+      "id": "HISSEDAR",
+      "name": "HISSEDAR",
+      "description": "Fen raporundan hissedar/davacı tablosunu (5 sütun) taşırır. Ör: =HERMES.HISSEDAR(\"G:\\...\\klasor\")",
+      "parameters": [
+        { "name": "klasor", "description": "Dava klasörünün tam yolu", "type": "string" }
+      ],
+      "result": { "type": "any", "dimensionality": "matrix" },
+      "options": { "stream": true }
     }
   ]
 }

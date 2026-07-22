@@ -38,6 +38,41 @@ async function callBridge(fn, args, invocation) {
   return result;
 }
 
+// Matris (taşma dizisi) döndüren fonksiyonlar için köprü çağrısı.
+async function callBridgeMatrix(fn, args, invocation) {
+  const streaming = invocation && typeof invocation.setResult === "function";
+  if (streaming) invocation.setResult([["⏳ Hermes…"]]);
+  let result;
+  try {
+    const res = await fetch(BRIDGE + "/api/fn", {
+      method: "POST",
+      headers: { "content-type": "application/json", ...(TOKEN ? { "x-hermes-token": TOKEN } : {}) },
+      body: JSON.stringify({ fn, args }),
+    });
+    if (!res.ok) result = [[`#HERMES! HTTP ${res.status}`]];
+    else {
+      const data = await res.json();
+      result = Array.isArray(data.value) ? data.value : [[String(data.value == null ? "#HERMES! boş" : data.value)]];
+    }
+  } catch (e) {
+    result = [["#HERMES! köprü kapalı — bridge çalışıyor mu?"]];
+  }
+  if (streaming) {
+    invocation.setResult(result);
+    return;
+  }
+  return result;
+}
+
+// ── HERMES.DOSYA(etiketler, klasor) → alan tablosu (kolon taşma dizisi) ──────
+async function DOSYA(etiketler, klasor, invocation) {
+  return callBridgeMatrix("DOSYA", [etiketler, klasor], invocation);
+}
+// ── HERMES.HISSEDAR(klasor) → hissedar tablosu (2B taşma dizisi) ─────────────
+async function HISSEDAR(klasor, invocation) {
+  return callBridgeMatrix("HISSEDAR", [klasor], invocation);
+}
+
 // ── HERMES.SOR(soru, [bağlam]) ────────────────────────────────────────────
 async function SOR(soru, baglam, invocation) {
   return callBridge("SOR", [soru, baglam], invocation);
@@ -101,3 +136,5 @@ CustomFunctions.associate("SINIFLA", SINIFLA);
 CustomFunctions.associate("CIKAR", CIKAR);
 CustomFunctions.associate("OZETLE", OZETLE);
 CustomFunctions.associate("FORMUL", FORMUL);
+CustomFunctions.associate("DOSYA", DOSYA);
+CustomFunctions.associate("HISSEDAR", HISSEDAR);

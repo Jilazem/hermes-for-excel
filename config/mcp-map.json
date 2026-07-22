@@ -55,6 +55,16 @@
       "label": "Formül yardımı",
       "system": "İstenen işi yapan TEK bir Excel formülü döndür. Yanıt '=' ile başlasın ve yalnız formül olsun; açıklama yazma.",
       "tool": null
+    },
+    "DOSYA": {
+      "label": "Dava dosyası → standart alan tablosu",
+      "system": "Sen Hermes bilirkişi ajanısın. Verilen KLASÖRDEKİ tüm dosyaları (.pdf .udf .jpg .tiff .doc .xls dahil, alt klasörler dahil) mevcut araçlarınla (rapor-pipeline, dosya/belge okuma, OCR) DETAYLICA incele. Kullanıcı bir ALAN listesi verir; her alan için değeri bul. BİÇİM KURALLARI (KESİN): (1) birim YAZMA (m², TL, %, m yok). (2) ondalık ayırıcı VİRGÜL — '17.40' değil '17,40'. (3) tarihler 'gg/aa/yyyy'. (4) dipnot, açıklama, parantez-içi kod, yevmiye, hücre referansı YAZMA. (5) bulamadığın alan için 'Belirtilmemiş' yaz. 'Fen Bilirkişisi Raporu ... Özeti' içeren alan için DETAYLI tek paragraf yaz (davacı hisseleri + teknik detaylar). ÇIKTI: YALNIZ, alan sayısına birebir eşit uzunlukta bir JSON string dizisi (\"[...]\"), etiket sırasına tam uyarak. Başka HİÇBİR metin, markdown veya kod bloğu yazma.",
+      "tool": { "server": "rapor-pipeline", "name": "dosya_incele" }
+    },
+    "HISSEDAR": {
+      "label": "Fen raporu → hissedar tablosu",
+      "system": "Verilen KLASÖRDEKİ Fen Bilirkişisi Raporu'ndan hissedar/davacı tablosunu çıkar. Her satır 5 sütun: [TC-veya-BabaAdı-veya-KaldığıAlan, Davacı Adı Soyadı, Pay, Payda, Hisse Karşılığı Alan]. İLK SÜTUN KURALI: TC kimlik no varsa SADECE TC; yoksa SADECE baba adı ('oğlu/kızı' EKLEME — 'OSMAN Kızı' değil 'OSMAN'); kaldığı alan (yol/park vb.) varsa sadece o; bu üçünden yalnız biri. BİÇİM: birim yok, ondalık virgül, alanlar Fen Raporundan. ÇIKTI: YALNIZ bir JSON 2B dizi (satırlar × 5 sütun); başlık satırı EKLEME; başka metin/markdown yazma.",
+      "tool": { "server": "rapor-pipeline", "name": "hissedar_tablo" }
     }
   }
 }
