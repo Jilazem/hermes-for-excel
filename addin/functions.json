@@ -139,6 +139,20 @@
       ],
       "result": { "type": "any", "dimensionality": "matrix" },
       "options": { "stream": true }
-    }
+    },
+
+    { "id": "ASK", "name": "ASK", "description": "Ask the Hermes agent a free-form question; it picks tools and answers in the cell.", "parameters": [ { "name": "question", "type": "string" }, { "name": "context", "type": "string", "optional": true } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "PRECEDENT", "name": "PRECEDENT", "description": "Find the most relevant case-law precedent for a topic.", "parameters": [ { "name": "topic", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "DEED", "name": "DEED", "description": "Look up title-deed / parcel information.", "parameters": [ { "name": "query", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "PARCEL", "name": "PARCEL", "description": "Location, area and nature for province/district/block/parcel.", "parameters": [ { "name": "province", "type": "string" }, { "name": "district", "type": "string" }, { "name": "block", "type": "string" }, { "name": "parcel", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "CALC", "name": "CALC", "description": "Run a calculation through the compute engine (valuation, interest, etc.).", "parameters": [ { "name": "expression", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "REPORT", "name": "REPORT", "description": "Generate a short report section.", "parameters": [ { "name": "section", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "RECALL", "name": "RECALL", "description": "Recall a stored fact from memory.", "parameters": [ { "name": "key", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "CLASSIFY", "name": "CLASSIFY", "description": "Classify a value by a rule; returns the label. Ex: =HERMES.CLASSIFY(A2,\"risk: high/med/low\")", "parameters": [ { "name": "value", "type": "string" }, { "name": "rule", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "EXTRACT", "name": "EXTRACT", "description": "Extract a field from text. Ex: =HERMES.EXTRACT(A2,\"company name\")", "parameters": [ { "name": "value", "type": "string" }, { "name": "what", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "SUMMARIZE", "name": "SUMMARIZE", "description": "Summarize a range in one sentence.", "parameters": [ { "name": "range", "type": "any", "dimensionality": "matrix" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "FORMULA", "name": "FORMULA", "description": "Suggest a single Excel formula from a description.", "parameters": [ { "name": "goal", "type": "string" } ], "result": { "type": "string" }, "options": { "stream": true } },
+    { "id": "FILES", "name": "FILES", "description": "Analyze all files in a case folder; fills column B by the labels in column A (spills). Ex: =HERMES.FILES(A1:A25,\"C:\\...\\folder\")", "parameters": [ { "name": "labels", "type": "any", "dimensionality": "matrix" }, { "name": "folder", "type": "string" } ], "result": { "type": "any", "dimensionality": "matrix" }, "options": { "stream": true } },
+    { "id": "SHAREHOLDERS", "name": "SHAREHOLDERS", "description": "Shareholder/claimant table (5 columns) from the expert report (spills).", "parameters": [ { "name": "folder", "type": "string" } ], "result": { "type": "any", "dimensionality": "matrix" }, "options": { "stream": true } }
   ]
 }
