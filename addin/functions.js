@@ -124,6 +124,35 @@ async function FORMUL(amac, invocation) {
   return callBridge("FORMUL", [amac], invocation);
 }
 
+// ── İngilizce takma adlar (English aliases — Türkçe olanlarla birebir aynı) ──
+async function ASK(q, ctx, i) { return callBridge("SOR", [q, ctx], i); }
+async function PRECEDENT(topic, i) { return callBridge("EMSAL", [topic], i); }
+async function DEED(query, i) { return callBridge("TAPU", [query], i); }
+async function PARCEL_EN(prov, dist, block, parcel, i) { return callBridge("PARSEL", [prov, dist, block, parcel], i); }
+async function CALC(expr, i) { return callBridge("HESAP", [expr], i); }
+async function REPORT(section, i) { return callBridge("RAPOR", [section], i); }
+async function RECALL(k, i) { return callBridge("HAFIZA", [k], i); }
+async function CLASSIFY(v, rule, i) { return callBridge("SINIFLA", [v, rule], i); }
+async function EXTRACT(v, what, i) { return callBridge("CIKAR", [v, what], i); }
+async function SUMMARIZE(range, i) { return callBridge("OZETLE", [range], i); }
+async function FORMULA(goal, i) { return callBridge("FORMUL", [goal], i); }
+async function FILES(labels, folder, i) { return callBridgeMatrix("DOSYA", [labels, folder], i); }
+async function SHAREHOLDERS(folder, i) { return callBridgeMatrix("HISSEDAR", [folder], i); }
+
+CustomFunctions.associate("ASK", ASK);
+CustomFunctions.associate("PRECEDENT", PRECEDENT);
+CustomFunctions.associate("DEED", DEED);
+CustomFunctions.associate("PARCEL", PARCEL_EN);
+CustomFunctions.associate("CALC", CALC);
+CustomFunctions.associate("REPORT", REPORT);
+CustomFunctions.associate("RECALL", RECALL);
+CustomFunctions.associate("CLASSIFY", CLASSIFY);
+CustomFunctions.associate("EXTRACT", EXTRACT);
+CustomFunctions.associate("SUMMARIZE", SUMMARIZE);
+CustomFunctions.associate("FORMULA", FORMULA);
+CustomFunctions.associate("FILES", FILES);
+CustomFunctions.associate("SHAREHOLDERS", SHAREHOLDERS);
+
 CustomFunctions.associate("SOR", SOR);
 CustomFunctions.associate("EMSAL", EMSAL);
 CustomFunctions.associate("TAPU", TAPU);
