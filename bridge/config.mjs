@@ -56,6 +56,11 @@ export const config = {
   fnCacheTtlMs: num(env.HERMES_FN_CACHE_TTL_MS, 300000),
   fnTimeoutMs: num(env.HERMES_FN_TIMEOUT_MS, 90000),
 
+  // Yol çevirisi: Excel'deki Windows yolunu (ör. G:\Drive'ım\) ajanın gördüğü
+  // mount yoluna (ör. /home/kullanici/WinShare/) çevirir. DOSYA/HISSEDAR için.
+  pathFrom: env.HERMES_PATH_FROM || "",
+  pathTo: env.HERMES_PATH_TO || "",
+
   tls: {
     cert: env.HERMES_TLS_CERT || "",
     key: env.HERMES_TLS_KEY || "",

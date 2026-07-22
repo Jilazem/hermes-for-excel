@@ -12,49 +12,75 @@ const history = [];
 
 const $ = (id) => document.getElementById(id);
 
+// Beklenmeyen bir hata tüm event listener kurulumunu sessizce durdurmasın diye
+// (görünmez hata = "hiçbir düğme çalışmıyor" şikayeti) — her adım kendi try/catch'inde.
+function safe(label, fn) {
+  try {
+    fn();
+  } catch (e) {
+    console.error("Hermes init hatası [" + label + "]:", e);
+    showInitError(label, e);
+  }
+}
+function showInitError(label, e) {
+  try {
+    const div = document.createElement("div");
+    div.className = "msg msg--sys";
+    div.style.color = "var(--off)";
+    div.textContent = "⚠️ Başlatma hatası (" + label + "): " + (e && (e.message || e));
+    document.getElementById("log")?.appendChild(div);
+  } catch {
+    /* log alanı da yoksa sessizce geç */
+  }
+}
+
 Office.onReady((info) => {
   if (info.host !== Office.HostType.Excel) return;
-  // Çok dilli arayüz
-  applyI18n();
-  updateRecBtn();
-  $("setLang").addEventListener("change", (e) => setLang(e.target.value));
 
-  $("send").addEventListener("click", send);
-  $("input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
-  });
+  safe("i18n", () => applyI18n());
+  safe("recBtn-init", () => updateRecBtn());
+  safe("lang-select", () => $("setLang").addEventListener("change", (e) => setLang(e.target.value)));
+
+  safe("send-button", () => $("send").addEventListener("click", send));
+  safe("input-enter", () =>
+    $("input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        send();
+      }
+    })
+  );
   // Ayarlar
-  $("settingsBtn").addEventListener("click", toggleSettings);
-  $("settingsCancel").addEventListener("click", () => $("settings").classList.add("hidden"));
-  $("settingsSave").addEventListener("click", saveSettings);
-  $("setProvider").addEventListener("change", updateProviderFields);
+  safe("settings-btn", () => $("settingsBtn").addEventListener("click", toggleSettings));
+  safe("settings-cancel", () => $("settingsCancel").addEventListener("click", () => $("settings").classList.add("hidden")));
+  safe("settings-save", () => $("settingsSave").addEventListener("click", saveSettings));
+  safe("settings-provider", () => $("setProvider").addEventListener("change", updateProviderFields));
 
-  pollHealth();
-  setInterval(pollHealth, 15000);
-  connectCommandStream();
+  safe("poll-health", () => {
+    pollHealth();
+    setInterval(pollHealth, 15000);
+  });
+  safe("sse", () => connectCommandStream());
 
   // Seçili hücreleri canlı algıla (Claude add-in gibi)
-  try {
-    Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, updateSelectionBar);
-  } catch (e) {
-    /* olay desteklenmiyorsa yoksay */
-  }
-  updateSelectionBar();
-  $("selUse").addEventListener("click", useSelection);
+  safe("selection-handler", () => {
+    try {
+      Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, updateSelectionBar);
+    } catch (e) {
+      /* olay desteklenmiyorsa yoksay */
+    }
+  });
+  safe("selection-init", () => updateSelectionBar());
+  safe("selection-use-btn", () => $("selUse").addEventListener("click", useSelection));
 
   // İşlem izleyici (makro-benzeri): hücre değişimlerini kaydet, otomasyon öner
-  $("recBtn").addEventListener("click", toggleRecord);
-  try {
+  safe("record-btn", () => $("recBtn").addEventListener("click", toggleRecord));
+  safe("record-onchanged", () => {
     Excel.run(async (ctx) => {
       ctx.workbook.worksheets.onChanged.add(onWorkbookChanged);
       await ctx.sync();
-    });
-  } catch (e) {
-    /* onChanged desteklenmiyorsa yoksay */
-  }
+    }).catch((e) => console.error("onChanged kaydı başarısız:", e));
+  });
 });
 
 // ── İşlem izleyici (otomasyon önerici) ───────────────────────────────────────

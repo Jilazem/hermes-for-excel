@@ -129,6 +129,29 @@ export function normalizeActions(actions) {
   return out;
 }
 
+// Ajan yanıtından bir JSON DİZİSİ ([...]) çıkar (matris/kolon fonksiyonları için).
+export function extractJsonArray(text) {
+  if (typeof text !== "string") return null;
+  let t = text.trim();
+  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) t = fence[1].trim();
+  const start = t.indexOf("[");
+  const end = t.lastIndexOf("]");
+  if (start === -1 || end === -1 || end < start) return null;
+  const slice = t.slice(start, end + 1);
+  try {
+    const v = JSON.parse(slice);
+    return Array.isArray(v) ? v : null;
+  } catch {
+    try {
+      const v = JSON.parse(slice.replace(/,\s*([}\]])/g, "$1"));
+      return Array.isArray(v) ? v : null;
+    } catch {
+      return null;
+    }
+  }
+}
+
 // Ajan bazen JSON'u ```json blokları içinde veya gevşek biçimde döndürür.
 export function extractJson(text) {
   if (typeof text !== "string") return null;
