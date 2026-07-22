@@ -377,9 +377,26 @@ async function gatherContext() {
         columnCount: used.isNullObject ? 0 : used.columnCount,
       })),
     };
+    // Büyük seçimlerde tüm değerleri göndermek context'i taşırır ve ajanı
+    // yavaşlatır → küçükse tamamını, büyükse yalnız ilk ~60 satırlık örneği gönder.
+    const cells = sel.rowCount * sel.columnCount;
+    let values = null, truncated = false;
+    if (cells <= 1500) {
+      values = sel.values;
+    } else if (sel.values && sel.values.length) {
+      const maxRows = 60;
+      values = sel.values.slice(0, maxRows).map((r) =>
+        (r || []).map((v) => {
+          const s = v == null ? "" : String(v);
+          return s.length > 40 ? s.slice(0, 40) + "…" : s;
+        })
+      );
+      truncated = sel.rowCount > maxRows;
+    }
     const selection = {
       address: sel.address,
-      values: sel.rowCount * sel.columnCount <= 200 ? sel.values : null,
+      values,
+      truncated,
       rowCount: sel.rowCount,
       columnCount: sel.columnCount,
     };
