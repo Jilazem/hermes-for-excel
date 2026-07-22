@@ -141,7 +141,7 @@ async function handleFn(req, res) {
     try {
       const raw = await askHermes(
         [{ role: "system", content: spec.system }, { role: "user", content: user }],
-        { timeoutMs: config.fnTimeoutMs, maxTokens: 4096, idempotencyKey: key }
+        { timeoutMs: 240000, maxTokens: 4096, idempotencyKey: key }
       );
       let arr = extractJsonArray(raw) || [];
       while (arr.length < labels.length) arr.push("Belirtilmemiş");
@@ -160,7 +160,7 @@ async function handleFn(req, res) {
     try {
       const raw = await askHermes(
         [{ role: "system", content: spec.system }, { role: "user", content: `Klasör: ${folder}` }],
-        { timeoutMs: config.fnTimeoutMs, maxTokens: 4096, idempotencyKey: key }
+        { timeoutMs: 240000, maxTokens: 4096, idempotencyKey: key }
       );
       const arr = extractJsonArray(raw) || [];
       const matrix = arr
