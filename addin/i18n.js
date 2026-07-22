@@ -130,7 +130,11 @@ function setLang(l) {
   applyI18n();
 }
 function applyI18n() {
-  document.querySelectorAll("[data-i18n]").forEach((el) => (el.textContent = t(el.getAttribute("data-i18n"))));
+  // GÜVENLİK: yalnız yaprak öğelerin metnini değiştir; çocuk (input/select) içeren
+  // öğeyi ezme — aksi halde form elemanları silinir.
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    if (el.children.length === 0) el.textContent = t(el.getAttribute("data-i18n"));
+  });
   document.querySelectorAll("[data-i18n-ph]").forEach((el) => (el.placeholder = t(el.getAttribute("data-i18n-ph"))));
   document.querySelectorAll("[data-i18n-title]").forEach((el) => (el.title = t(el.getAttribute("data-i18n-title"))));
   // dil menüsünü doldur
