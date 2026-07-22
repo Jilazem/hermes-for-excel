@@ -1,5 +1,11 @@
 # Hermes for Excel
 
+[![Built with Claude](https://img.shields.io/badge/Built%20with-Claude-8A2BE2?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Anthropic](https://img.shields.io/badge/Anthropic-Claude-191919?logo=anthropic&logoColor=white)](https://www.anthropic.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> 🤖 Designed and built with **[Claude](https://claude.com/claude-code)** by **[Anthropic](https://www.anthropic.com)** (@AnthropicAI).
+
 Bring an **AI agent (or any LLM)** into Microsoft Excel — as **in-cell functions**
 and a **chat side panel**. Ask questions from a cell with
 `=HERMES.SOR("…")`, chat with the agent about your sheet, let it **fill and
@@ -191,6 +197,11 @@ docs/                  architecture, remote setup, MCP tool contract (TR)
 ```
 
 ## Credits & license
+
+**Designed and written with [Claude](https://claude.com/claude-code) — Anthropic's
+AI assistant** ([Anthropic](https://www.anthropic.com), [@AnthropicAI](https://x.com/AnthropicAI)).
+The architecture, bridge, custom functions, task pane, i18n and this documentation
+were built in a pair-programming session with Claude (Claude Code).
 
 Design informed by [`lEWFkRAD/hermes-excel-sidecar`](https://github.com/lEWFkRAD/hermes-excel-sidecar)
 (task-pane + Node-bridge pattern, action contract, formula rebasing) and

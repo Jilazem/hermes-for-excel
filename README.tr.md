@@ -1,5 +1,11 @@
 # Hermes for Excel
 
+[![Built with Claude](https://img.shields.io/badge/Built%20with-Claude-8A2BE2?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Anthropic](https://img.shields.io/badge/Anthropic-Claude-191919?logo=anthropic&logoColor=white)](https://www.anthropic.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> 🤖 **[Claude](https://claude.com/claude-code)** ([Anthropic](https://www.anthropic.com), [@AnthropicAI](https://x.com/AnthropicAI)) ile tasarlanıp yazılmıştır.
+
 Excel'den **Hermes ajanına** ulaşmanızı sağlayan Office eklentisi. İki yönlü:
 
 - **Hücreden Hermes'e:** `=HERMES.SOR("tapu bilgilerini getir")` yazın; Hermes
