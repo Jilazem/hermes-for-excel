@@ -54,7 +54,10 @@ export const config = {
   },
 
   fnCacheTtlMs: num(env.HERMES_FN_CACHE_TTL_MS, 300000),
-  fnTimeoutMs: num(env.HERMES_FN_TIMEOUT_MS, 90000),
+  fnTimeoutMs: num(env.HERMES_FN_TIMEOUT_MS, 120000),
+  // Sohbet paneli ajanı: araç/rapor işleri uzun sürebilir → hücre
+  // fonksiyonlarından daha uzun bir zaman aşımı ver (varsayılan 240 sn).
+  chatTimeoutMs: num(env.HERMES_CHAT_TIMEOUT_MS, 240000),
 
   // Yol çevirisi: Excel'deki Windows yolunu (ör. G:\Drive'ım\) ajanın gördüğü
   // mount yoluna (ör. /home/kullanici/WinShare/) çevirir. DOSYA/HISSEDAR için.

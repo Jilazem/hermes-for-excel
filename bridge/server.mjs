@@ -251,8 +251,15 @@ function workbookContextBlock(wb, selection) {
   }
   if (wb?.activeSheet) lines.push(`Aktif sayfa: ${wb.activeSheet}`);
   if (selection?.address) {
-    lines.push(`Seçim: ${selection.address}`);
-    if (selection.values) lines.push(`Seçim değerleri: ${JSON.stringify(selection.values).slice(0, 500)}`);
+    lines.push(`Seçim: ${selection.address} (${selection.rowCount || 0}x${selection.columnCount || 0})`);
+    if (selection.values) {
+      lines.push(`Seçim değerleri (satır dizileri):\n${JSON.stringify(selection.values).slice(0, 8000)}`);
+      if (selection.truncated) {
+        lines.push(`NOT: Yukarıda tablonun yalnız ilk ${selection.values.length} satırı var; toplam ${selection.rowCount} satır. Tümünü görmen gerekirse kullanıcıdan daha küçük bir aralık seçmesini veya dosya analizini (=HERMES.DOSYA) kullanmasını iste.`);
+      }
+    } else {
+      lines.push(`NOT: Seçim çok büyük (${selection.rowCount}x${selection.columnCount}), değerler gönderilmedi. Kullanıcıdan daha küçük bir aralık seçmesini iste.`);
+    }
   }
   return lines.join("\n");
 }
@@ -270,7 +277,7 @@ async function handleChat(req, res) {
   ];
 
   try {
-    const raw = await askHermes(messages, { timeoutMs: config.fnTimeoutMs, maxTokens: 2048 });
+    const raw = await askHermes(messages, { timeoutMs: config.chatTimeoutMs, maxTokens: 2048 });
     const parsed = extractJson(raw);
     if (parsed && typeof parsed === "object") {
       return json(res, 200, {
